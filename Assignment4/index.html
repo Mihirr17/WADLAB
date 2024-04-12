@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Swipe, Button, and Arrow Image Movement</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  <style>
+    #movableImage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+<body>
+  <div data-role="page" id="page">
+    <div data-role="content">
+      <img id="movableImage" src="https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg" alt="Movable Image">
+      <div data-role="controlgroup" data-type="horizontal">
+        <a href="#" id="moveUp" class="ui-btn ui-icon-arrow-u ui-btn-icon-notext ui-corner-all">Up</a>
+        <a href="#" id="moveDown" class="ui-btn ui-icon-arrow-d ui-btn-icon-notext ui-corner-all">Down</a>
+        <a href="#" id="moveLeft" class="ui-btn ui-icon-arrow-l ui-btn-icon-notext ui-corner-all">Left</a>
+        <a href="#" id="moveRight" class="ui-btn ui-icon-arrow-r ui-btn-icon-notext ui-corner-all">Right</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).on("pagecreate", function() {
+      var $movableImage = $("#movableImage");
+      var stepSize = 30; 
+      var animationDuration = 300; 
+
+      
+      $("#moveUp").on("click", function() {
+        moveImage(0, -stepSize);
+      });
+
+      $("#moveDown").on("click", function() {
+        moveImage(0, stepSize);
+      });
+
+      $("#moveLeft").on("click", function() {
+        moveImage(-stepSize, 0);
+      });
+
+      $("#moveRight").on("click", function() {
+        moveImage(stepSize, 0);
+      });
+
+  
+      $(document).on("keydown", function(e) {
+        switch (e.which) {
+          case 37: 
+            moveImage(-stepSize, 0);
+            break;
+          case 38:
+            moveImage(0, -stepSize);
+            break;
+          case 39: 
+            moveImage(stepSize, 0);
+            break;
+          case 40: 
+            moveImage(0, stepSize);
+            break;
+        }
+      });
+
+      $movableImage.on("swiperight", function() {
+        moveImage(stepSize, 0);
+      });
+
+      $movableImage.on("swipeleft", function() {
+        moveImage(-stepSize, 0);
+      });
+
+      $movableImage.on("swipeup", function() {
+        moveImage(0, -stepSize);
+      });
+
+      $movableImage.on("swipedown", function() {
+        moveImage(0, stepSize);
+      });
+
+      function moveImage(deltaX, deltaY) {
+        var currentLeft = parseFloat($movableImage.css("left"));
+        var currentTop = parseFloat($movableImage.css("top"));
+
+        var newLeft = currentLeft + deltaX;
+        var newTop = currentTop + deltaY;
+
+       
+        $movableImage.animate({
+          left: newLeft + "px",
+          top: newTop + "px"
+        }, animationDuration);
+      }
+    });
+  </script>
+</body>
+</html>
